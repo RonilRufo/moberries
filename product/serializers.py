@@ -34,7 +34,6 @@ class PizzaSerializer(UpdateSerializerMixin, serializers.ModelSerializer):
         fields = (
             'id',
             'name',
-            'sizes',
         )
         read_only_fields = (
             'id',

@@ -56,10 +56,9 @@ class TestPizza(APITestCase):
     def setUp(self):
         size_30 = PizzaSizeFactory(size=30)
         size_50 = PizzaSizeFactory(size=50)
-        self.pizza = HawaiianPizzaFactory(sizes=(size_30, size_50))
+        self.pizza = HawaiianPizzaFactory()
         self.payload = {
-            'name': "Pepperoni",
-            'sizes': [size_30.pk, size_50.pk]
+            'name': "Pepperoni"
         }
         self.url = reverse('pizza-list')
         self.detail_url = reverse(

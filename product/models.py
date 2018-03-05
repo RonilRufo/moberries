@@ -30,10 +30,6 @@ class Pizza(models.Model):
         max_length=64,
         unique=True,
     )
-    sizes = models.ManyToManyField(
-        'product.PizzaSize',
-        related_name='pizzas',
-    )
 
     class Meta:
         verbose_name = _('Pizza')
