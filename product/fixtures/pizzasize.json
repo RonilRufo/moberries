@@ -1,0 +1,16 @@
+[
+{
+    "model": "product.pizzasize",
+    "pk": 1,
+    "fields": {
+        "size": 30
+    }
+},
+{
+    "model": "product.pizzasize",
+    "pk": 2,
+    "fields": {
+        "size": 50
+    }
+}
+]
