@@ -54,8 +54,6 @@ class TestPizza(APITestCase):
     Test cases for :model:`product.Pizza`
     """
     def setUp(self):
-        size_30 = PizzaSizeFactory(size=30)
-        size_50 = PizzaSizeFactory(size=50)
         self.pizza = HawaiianPizzaFactory()
         self.payload = {
             'name': "Pepperoni"
