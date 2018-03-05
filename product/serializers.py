@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
 
+from .mixins import UpdateSerializerMixin
 from .models import (
     Pizza,
     PizzaSize,
@@ -23,7 +24,7 @@ class PizzaSizeSerializer(serializers.ModelSerializer):
         )
 
 
-class PizzaSerializer(serializers.ModelSerializer):
+class PizzaSerializer(UpdateSerializerMixin, serializers.ModelSerializer):
     """
     Serializer to be used by :model:`product.Pizza`
     """
