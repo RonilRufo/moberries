@@ -1,11 +1,15 @@
 from django.urls import reverse
 
+from decimal import Decimal
+
 from rest_framework import status
 from rest_framework.test import APITestCase
 
 from .factories import (
     PizzaSizeFactory,
     HawaiianPizzaFactory,
+    HawaiianSize30Factory,
+    PizzaFactory,
 )
 
 
@@ -84,5 +88,48 @@ class TestPizza(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_delete_pizza(self):
+        response = self.client.delete(self.detail_url, {})
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+
+class TestPizzaVariation(APITestCase):
+    """
+    Test cases for :model:`product.PizzaVariation`
+    """
+    def setUp(self):
+        self.variation = HawaiianSize30Factory()
+        pizza = PizzaFactory(name="Mac and Cheese")
+        size30 = PizzaSizeFactory(size=30)
+        self.payload = {
+            'pizza': pizza.pk,
+            'size': size30.pk,
+            'price': Decimal('10.99'),
+        }
+        self.url = reverse('pizzavariation-list')
+        self.detail_url = reverse(
+            'pizzavariation-detail',
+            kwargs={'pk': self.variation.pk}
+        )
+
+    def test_get_pizza_variation_list(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_pizza_variation_detail(self):
+        response = self.client.get(self.detail_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_create_pizza_variation(self):
+        response = self.client.post(self.url, self.payload)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_update_pizza_variation(self):
+        payload = {
+            "price": Decimal('9.99')
+        }
+        response = self.client.put(self.detail_url, payload)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_delete_pizza_variation(self):
         response = self.client.delete(self.detail_url, {})
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

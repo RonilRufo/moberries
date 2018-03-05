@@ -21,12 +21,14 @@ from rest_framework.routers import DefaultRouter
 from product.views import (
     PizzaViewSet,
     PizzaSizeViewSet,
+    PizzaVariationViewSet,
 )
 
 
 router = DefaultRouter()
 router.register(r'pizza-sizes', PizzaSizeViewSet)
 router.register(r'pizzas', PizzaViewSet)
+router.register(r'pizza-variations', PizzaVariationViewSet)
 
 
 urlpatterns = [
