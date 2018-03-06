@@ -5,6 +5,7 @@ from faker import Faker
 from rest_framework import status
 from rest_framework.test import APITestCase
 
+from .constants import ORDER_PAID
 from .factories import (
     OrderItemFactory,
 )
@@ -16,6 +17,53 @@ from product.factories import (
 
 
 fake = Faker()
+
+
+class TestOrder(APITestCase):
+    """
+    Test cases for :model:`order.Order`
+    """
+
+    def setUp(self):
+        pizza = HawaiianPizzaFactory()
+        size = PizzaSize50Factory()
+        # Make sure to create a Variation first
+        # before creating an order item
+        self.variation = PizzaVariationFactory(
+            pizza=pizza,
+            size=size,
+            price=Decimal('8.99')
+        )
+        self.item = OrderItemFactory(
+            pizza=self.variation.pizza,
+            size=self.variation.size,
+            quantity=2
+        )
+        self.order = self.item.order
+        self.url = reverse('order-list')
+        self.detail_url = reverse(
+            'order-detail',
+            kwargs={'pk': self.order.pk}
+        )
+
+    def test_get_order_list(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_order_detail(self):
+        response = self.client.get(self.detail_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_update_order(self):
+        payload = {
+            "status": ORDER_PAID
+        }
+        response = self.client.put(self.detail_url, payload)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_delete_order(self):
+        response = self.client.delete(self.detail_url, {})
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
 
 class TestOrderItem(APITestCase):
@@ -37,9 +85,7 @@ class TestOrderItem(APITestCase):
             size=self.variation.size,
             quantity=2
         )
-        # order = OrderFactory()
         self.payload = {
-            # 'order': order.pk,
             'customer_name': fake.name(),
             'customer_address': fake.address(),
             'pizza': pizza.pk,
