@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 
 from .constants import ORDER_IN_PROGRESS
 from .models import (
@@ -11,9 +11,16 @@ from .serializers import (
 )
 
 
-class OrderViewSet(viewsets.ModelViewSet):
+class OrderViewSet(mixins.RetrieveModelMixin,
+                   mixins.UpdateModelMixin,
+                   mixins.DestroyModelMixin,
+                   mixins.ListModelMixin,
+                   viewsets.GenericViewSet):
     """
-    CRUD for :model:`product.Order`
+    ViewSet that handles :model:`product.Order` requests.
+    This is missing the `CREATE` mixin because we don't
+    allow creation of orders. Creation of orders are done
+    automatically via creation of :model:`order.OrderItem`
     """
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
