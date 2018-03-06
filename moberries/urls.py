@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from rest_framework.routers import DefaultRouter
+from rest_framework_swagger.views import get_swagger_view
 
 from order.views import (
     OrderViewSet,
@@ -28,6 +29,8 @@ from product.views import (
     PizzaVariationViewSet,
 )
 
+
+schema_view = get_swagger_view(title='MoBerries API')
 
 router = DefaultRouter()
 router.register(r'pizza-sizes', PizzaSizeViewSet)
@@ -42,4 +45,5 @@ urlpatterns = [
 
     path(r'api-auth/', include('rest_framework.urls')),
     path(r'api/v1/', include(router.urls)),
+    path(r'docs/', schema_view),
 ]
