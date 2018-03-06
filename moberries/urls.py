@@ -18,6 +18,10 @@ from django.urls import path, include
 
 from rest_framework.routers import DefaultRouter
 
+from order.views import (
+    OrderViewSet,
+    OrderItemViewSet,
+)
 from product.views import (
     PizzaViewSet,
     PizzaSizeViewSet,
@@ -29,6 +33,8 @@ router = DefaultRouter()
 router.register(r'pizza-sizes', PizzaSizeViewSet)
 router.register(r'pizzas', PizzaViewSet)
 router.register(r'pizza-variations', PizzaVariationViewSet)
+router.register(r'orders', OrderViewSet)
+router.register(r'order-items', OrderItemViewSet)
 
 
 urlpatterns = [

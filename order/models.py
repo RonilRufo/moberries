@@ -8,6 +8,10 @@ from .constants import (
     ORDER_CHOICES,
     ORDER_IN_PROGRESS,
 )
+from .signals import (
+    orderitem_pre_save,
+    orderitem_post_save,
+)
 
 
 class Order(models.Model):
@@ -95,3 +99,7 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return "{}".format(self.pizza)
+
+
+models.signals.pre_save.connect(orderitem_pre_save, sender=OrderItem)
+models.signals.post_save.connect(orderitem_post_save, sender=OrderItem)

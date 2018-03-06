@@ -88,3 +88,13 @@ class HawaiianSize50Factory(factory.django.DjangoModelFactory):
     class Meta:
         model = 'product.PizzaVariation'
         django_get_or_create = ('pizza', 'size')
+
+
+class PizzaVariationFactory(factory.django.DjangoModelFactory):
+    """
+    Factory for :model:`product.PizzaVariation`
+    """
+
+    class Meta:
+        model = 'product.PizzaVariation'
+        django_get_or_create = ('pizza', 'size')
