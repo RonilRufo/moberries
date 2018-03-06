@@ -1,18 +1,21 @@
 from django.urls import reverse
 
 from decimal import Decimal
+from faker import Faker
 from rest_framework import status
 from rest_framework.test import APITestCase
 
 from .factories import (
     OrderItemFactory,
-    OrderFactory,
 )
 from product.factories import (
     HawaiianPizzaFactory,
     PizzaSize50Factory,
     PizzaVariationFactory,
 )
+
+
+fake = Faker()
 
 
 class TestOrderItem(APITestCase):
@@ -34,9 +37,11 @@ class TestOrderItem(APITestCase):
             size=self.variation.size,
             quantity=2
         )
-        order = OrderFactory()
+        # order = OrderFactory()
         self.payload = {
-            'order': order.pk,
+            # 'order': order.pk,
+            'customer_name': fake.name(),
+            'customer_address': fake.address(),
             'pizza': pizza.pk,
             'size': size.pk,
             'quantity': 3
@@ -61,11 +66,13 @@ class TestOrderItem(APITestCase):
         self.assertEqual(subtotal, Decimal(response.data['price']))
 
     def test_update_order_item(self):
+        quantity = 1
         payload = {
-            "quantity": 1
+            "quantity": quantity
         }
+        subtotal = self.variation.price * quantity
         response = self.client.put(self.detail_url, payload)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(subtotal, Decimal(response.data['price']))
 
     def test_delete_order_item(self):
         response = self.client.delete(self.detail_url, {})
