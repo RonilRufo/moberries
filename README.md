@@ -25,3 +25,8 @@ A simple API for ordering pizza.
 ## Tests
 
  - `python manage.py test`
+
+## Documentations
+
+ - API documentations are available at `/docs/`:
+    - e.i. `http://localhost:8000/docs/`
