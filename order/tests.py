@@ -5,7 +5,10 @@ from faker import Faker
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from .constants import ORDER_PAID
+from .constants import (
+    ORDER_PAID,
+    ORDER_COMPLETED,
+)
 from .factories import (
     OrderItemFactory,
 )
@@ -123,3 +126,21 @@ class TestOrderItem(APITestCase):
     def test_delete_order_item(self):
         response = self.client.delete(self.detail_url, {})
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_update_order_item_completed(self):
+        quantity = 1
+        payload = {
+            "quantity": quantity
+        }
+
+        order = self.item.order
+        order_url = reverse(
+            'order-detail',
+            kwargs={'pk': order.pk}
+        )
+        order_payload = {
+            'status': ORDER_COMPLETED
+        }
+        self.client.put(order_url, order_payload)
+        response = self.client.put(self.detail_url, payload)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

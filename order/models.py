@@ -54,6 +54,10 @@ class Order(models.Model):
     def __str__(self):
         return "{} - {}".format(self.customer_name, self.total)
 
+    @property
+    def is_in_progress(self):
+        return self.status == ORDER_IN_PROGRESS
+
 
 class OrderItem(models.Model):
     """

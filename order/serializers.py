@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from django.utils.translation import ugettext_lazy as _
+
 from rest_framework import serializers
 
 from .fields import (
@@ -77,3 +79,11 @@ class OrderItemSerializer(UpdateSerializerMixin, serializers.ModelSerializer):
             'created_at',
             'last_modified',
         )
+
+    def validate(self, data):
+        if self.instance and self.instance.pk is not None and \
+           not self.instance.order.is_in_progress:
+            raise serializers.ValidationError(
+                _("Order was either paid, completed, or cancelled already.")
+            )
+        return data
