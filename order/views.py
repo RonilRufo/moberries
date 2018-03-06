@@ -21,6 +21,19 @@ class OrderViewSet(mixins.RetrieveModelMixin,
     This is missing the `CREATE` mixin because we don't
     allow creation of orders. Creation of orders are done
     automatically via creation of :model:`order.OrderItem`
+    ---
+    update:
+        Updates :model:`order.Order` object
+
+    retrieve:
+        Retrieves a :model:`order.Order` instance
+
+    list:
+        Returns list of all :model:`order.Order`
+
+    delete:
+        Removes/Deletes :model:`order.Order` objects
+
     """
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
@@ -29,6 +42,23 @@ class OrderViewSet(mixins.RetrieveModelMixin,
 class OrderItemViewSet(viewsets.ModelViewSet):
     """
     CRUD for :model:`product.OrderItem`
+    ---
+    create:
+        Creates :model:`order.OrderItem` object along with
+        its related :model:`order.Order`
+
+    update:
+        Updates :model:`order.OrderItem` object
+
+    retrieve:
+        Retrieves a :model:`order.OrderItem` instance
+
+    list:
+        Returns list of all :model:`order.OrderItem`
+
+    delete:
+        Removes/Deletes :model:`order.OrderItem` objects
+
     """
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
