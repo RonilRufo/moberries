@@ -14,38 +14,6 @@ from .models import (
 from product.mixins import UpdateSerializerMixin
 
 
-class OrderSerializer(UpdateSerializerMixin, serializers.ModelSerializer):
-    """
-    Serializer to be used by :model:`product.Order`
-    """
-
-    items = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Order
-        fields = (
-            'id',
-            'status',
-            'customer_name',
-            'customer_address',
-            'total',
-            'items',
-            'created_at',
-            'last_modified',
-        )
-        read_only_fields = (
-            'id',
-            'total',
-            'items',
-            'created_at',
-            'last_modified',
-        )
-
-    def get_items(self, obj):
-        serializer = OrderItemSerializer(obj.items.all(), many=True)
-        return serializer.data
-
-
 class OrderItemSerializer(UpdateSerializerMixin, serializers.ModelSerializer):
     """
     Serializer to be used by :model:`product.OrderItem`
@@ -87,3 +55,31 @@ class OrderItemSerializer(UpdateSerializerMixin, serializers.ModelSerializer):
                 _("Order was either paid, completed, or cancelled already.")
             )
         return data
+
+
+class OrderSerializer(UpdateSerializerMixin, serializers.ModelSerializer):
+    """
+    Serializer to be used by :model:`product.Order`
+    """
+
+    items = OrderItemSerializer(many=True)
+
+    class Meta:
+        model = Order
+        fields = (
+            'id',
+            'status',
+            'customer_name',
+            'customer_address',
+            'total',
+            'items',
+            'created_at',
+            'last_modified',
+        )
+        read_only_fields = (
+            'id',
+            'total',
+            'items',
+            'created_at',
+            'last_modified',
+        )
